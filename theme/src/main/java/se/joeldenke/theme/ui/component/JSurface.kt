@@ -1,4 +1,4 @@
-package se.joeldenke.jtemplate.ui.component
+package se.joeldenke.theme.ui.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.runtime.Composable
@@ -28,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import se.joeldenke.jtemplate.ui.theme.JDesignSystem
+import se.joeldenke.theme.ui.theme.JDesignSystem
 
 sealed interface JSurfaceInteraction {
     class Selectable(
@@ -128,7 +129,7 @@ fun JSurface(
     shape: Shape = RectangleShape,
     color: Color = JDesignSystem.colorTheme.primary,
     border: BorderStroke? = null,
-    content: @Composable () -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
     val interactionModifier = interaction.getModifier()
     Box(

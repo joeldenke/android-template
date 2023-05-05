@@ -1,4 +1,4 @@
-package se.joeldenke.jtemplate.ui.theme
+package se.joeldenke.theme.ui.theme
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme

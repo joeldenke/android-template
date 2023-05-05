@@ -1,4 +1,4 @@
-package se.joeldenke.jtemplate.ui.component
+package se.joeldenke.theme.ui.component
 
 import android.content.res.Resources
 import androidx.annotation.PluralsRes
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import se.joeldenke.jtemplate.ui.theme.JDesignSystem
+import se.joeldenke.theme.ui.theme.JDesignSystem
 
 sealed interface JTextResource {
     class AndroidString(
