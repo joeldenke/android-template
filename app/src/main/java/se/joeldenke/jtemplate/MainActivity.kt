@@ -6,27 +6,33 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.os.bundleOf
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.airbnb.android.showkase.models.Showkase
 import se.joeldenke.login.loginGraph
+import se.joeldenke.theme.ui.component.JButton
 import se.joeldenke.theme.ui.component.JSurface
 import se.joeldenke.theme.ui.component.JSurfaceInteraction
 import se.joeldenke.theme.ui.component.JText
 import se.joeldenke.theme.ui.component.JTextResource
+import se.joeldenke.theme.ui.theme.JDesignSystem
 
 sealed interface JScreen {
     val destination: String
     val content: @Composable (NavBackStackEntry) -> Unit
-    object Home: JScreen {
+
+    object Home : JScreen {
         override val destination = "Home"
         override val content: @Composable (NavBackStackEntry) -> Unit
             get() = {
@@ -36,16 +42,17 @@ sealed interface JScreen {
 }
 
 
-
 @Composable
 fun HomeScreen() {
     val context = LocalContext.current
-    se.joeldenke.theme.ui.component.JButton(
+    JButton(
         onClick = {
             context.startActivity(Showkase.getBrowserIntent(context))
         },
     ) {
-        Greeting("J Design System")
+        JText(
+            text = JTextResource.Text("Showkase J Design System!"),
+        )
     }
 }
 
@@ -69,22 +76,55 @@ fun NavigationItem(
 }
 
 @Composable
-fun NavigationBar(navController: NavController) {
+fun NavigationBar(
+    onOpenHome: () -> Unit,
+    onOpenUserNameLogin: () -> Unit
+) {
     Row {
-        NavigationItem(onClick = { navController.navigate("main") }, modifier = Modifier.weight(1f), label = {
-            JText(
-                text = JTextResource.Text(
-                    "Home"
+        NavigationItem(
+            onClick = onOpenHome,
+            modifier = Modifier.weight(1f),
+            label = {
+                JText(
+                    text = JTextResource.Text(
+                        "Home"
+                    )
                 )
-            )
-        })
-        NavigationItem(onClick = { navController.navigate("login") }, modifier = Modifier.weight(1f), label = {
-            JText(
-                text = JTextResource.Text(
-                    "Login"
+            })
+        NavigationItem(
+            onClick = onOpenUserNameLogin,
+            modifier = Modifier.weight(1f),
+            label = {
+                JText(
+                    text = JTextResource.Text(
+                        "Login"
+                    )
                 )
+            })
+    }
+}
+
+@Composable
+fun MainScreen(
+    navController: NavHostController = rememberNavController(),
+    onOpenHome: () -> Unit,
+    onOpenUserNameLogin: () -> Unit
+) {
+    JDesignSystem {
+        Column {
+            NavHost(
+                navController = navController,
+                startDestination = "main",
+                modifier = Modifier.weight(1f)
+            ) {
+                main()
+                loginGraph()
+            }
+            NavigationBar(
+                onOpenHome = onOpenHome,
+                onOpenUserNameLogin = onOpenUserNameLogin
             )
-        })
+        }
     }
 }
 
@@ -92,20 +132,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            se.joeldenke.theme.ui.theme.JDesignSystem {
-                val navController = rememberNavController()
-                Column {
-                    NavHost(
-                        navController = navController,
-                        startDestination = "main",
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        main()
-                        loginGraph()
-                    }
-                    NavigationBar(navController = navController)
-                }
-            }
+            val navController = rememberNavController()
+            MainScreen(
+                navController = navController,
+                onOpenHome = { navController.navigate("main", bundleOf()) },
+                onOpenUserNameLogin = { navController.navigate("login") }
+            )
         }
     }
 }
@@ -116,10 +148,12 @@ fun NavGraphBuilder.main() {
     }
 }
 
+@Preview(widthDp = 200, heightDp = 500, showBackground = true)
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    JText(
-        text = JTextResource.Text("Showkase $name!"),
-        modifier = modifier
-    )
+fun MainScreenPreview() {
+    val navController = rememberNavController()
+    MainScreen(onOpenHome = {}, onOpenUserNameLogin = {})
+    SideEffect {
+        navController.navigateUp()
+    }
 }
