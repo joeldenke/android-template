@@ -4,6 +4,7 @@ import android.graphics.Matrix
 import android.graphics.RectF
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposePath
@@ -94,20 +96,24 @@ fun UsernameLoginScreen(
             onValueChanged = onPasswordChanged,
             transformation = PasswordVisualTransformation(),
         )
+        val shape = RoundedCornerShape(50)
         Box(modifier = Modifier
             .background(
                 JDesignSystem.colorTheme.primary,
-                shape = RoundedCornerShape(50)
+                shape = shape
             )
+            .clip(shape)
             .drawWithContent {
                 prep()
                 drawContent()
                 sizedMorph.resizeMaybe(size.width, size.height)
                 drawPath(sizedMorph.morph.asPath().asComposePath(), Color.White)
             }
-            .clickable {
-                onSend()
-            }
+            .clickable(
+                indication = null,
+                onClick = onSend,
+                interactionSource = MutableInteractionSource()
+            )
         ) {
             Row(Modifier.padding(vertical = 8.dp, horizontal = 12.dp)) {
                 JText(text = JTextResource.Text("Send"))
