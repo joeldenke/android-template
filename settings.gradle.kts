@@ -18,3 +18,5 @@ rootProject.name = "JTemplate"
 include(":app")
 include(":feature:login")
 include(":core:designsystem")
+include(":core:testing")
+

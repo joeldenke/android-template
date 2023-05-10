@@ -20,8 +20,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
             extensions.configure<LibraryExtension> {
                 defaultConfig {
-                    testInstrumentationRunner =
-                        "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
+                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 }
                 configureGradleManagedDevices(this)
             }
@@ -32,9 +31,9 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", project(":core:designsystem"))
 
                 add("testImplementation", kotlin("test"))
-                //add("testImplementation", project(":core:testing"))
+                add("testImplementation", project(":core:testing"))
                 add("androidTestImplementation", kotlin("test"))
-                //add("androidTestImplementation", project(":core:testing"))
+                add("androidTestImplementation", project(":core:testing"))
 
                 add("implementation", libs.findLibrary("coil.kt").get())
                 add("implementation", libs.findLibrary("coil.kt.compose").get())
