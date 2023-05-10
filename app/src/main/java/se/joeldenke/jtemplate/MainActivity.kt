@@ -6,55 +6,23 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.os.bundleOf
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.airbnb.android.showkase.models.Showkase
 import se.joeldenke.login.loginGraph
-import se.joeldenke.theme.ui.component.JButton
 import se.joeldenke.theme.ui.component.JSurface
 import se.joeldenke.theme.ui.component.JSurfaceInteraction
 import se.joeldenke.theme.ui.component.JText
 import se.joeldenke.theme.ui.component.JTextResource
 import se.joeldenke.theme.ui.theme.JDesignSystem
 
-sealed interface JScreen {
-    val destination: String
-    val content: @Composable (NavBackStackEntry) -> Unit
-
-    object Home : JScreen {
-        override val destination = "Home"
-        override val content: @Composable (NavBackStackEntry) -> Unit
-            get() = {
-                HomeScreen()
-            }
-    }
-}
-
-
-@Composable
-fun HomeScreen() {
-    val context = LocalContext.current
-    JButton(
-        onClick = {
-            context.startActivity(Showkase.getBrowserIntent(context))
-        },
-    ) {
-        JText(
-            text = JTextResource.Text("Showkase J Design System!"),
-        )
-    }
-}
 
 @Composable
 fun NavigationItem(
@@ -90,7 +58,8 @@ fun NavigationBar(
                         "Home"
                     )
                 )
-            })
+            }
+        )
         NavigationItem(
             onClick = onOpenUserNameLogin,
             modifier = Modifier.weight(1f),
@@ -100,7 +69,8 @@ fun NavigationBar(
                         "Login"
                     )
                 )
-            })
+            }
+        )
     }
 }
 
@@ -151,9 +121,5 @@ fun NavGraphBuilder.main() {
 @Preview(widthDp = 200, heightDp = 500, showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    val navController = rememberNavController()
     MainScreen(onOpenHome = {}, onOpenUserNameLogin = {})
-    SideEffect {
-        navController.navigateUp()
-    }
 }

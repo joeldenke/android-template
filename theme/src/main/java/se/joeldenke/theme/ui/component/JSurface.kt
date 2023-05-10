@@ -10,8 +10,10 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.remember
@@ -158,13 +160,15 @@ private fun Modifier.jSurface(
     .clip(shape)
 
 
-@Preview(showBackground = true, name = "JSurface")
+@Preview(showBackground = true, name = "JSurface", widthDp = 200, heightDp = 50)
 @Composable
 fun JSurfacePreview() {
     JDesignSystem {
         JSurface(
             interaction = JSurfaceInteraction.None,
-            color = JDesignSystem.colorTheme.secondary
+            color = JDesignSystem.colorTheme.secondary,
+            shape = RoundedCornerShape(50),
+            modifier = Modifier.padding(8.dp)
         ) {
             JText(JTextResource.Text("\n"))
         }

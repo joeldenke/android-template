@@ -2,26 +2,21 @@ package se.joeldenke.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.graphics.shapes.Morph
-import androidx.graphics.shapes.RoundedPolygon
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import se.joeldenke.theme.ui.component.JButton
-import se.joeldenke.theme.ui.component.JMorpher
 import se.joeldenke.theme.ui.component.JText
 import se.joeldenke.theme.ui.component.JTextField
 import se.joeldenke.theme.ui.component.JTextResource
-import se.joeldenke.theme.ui.component.SizedMorph
 import se.joeldenke.theme.ui.theme.JDesignSystem
 
 data class UsernameUiState(
@@ -46,8 +41,6 @@ fun UsernameLoginScreen(
     uiState: UsernameUiState,
     onUsernameChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
-    prep: ContentDrawScope.() -> Unit = {},
-    sizedMorph: SizedMorph,
     onSend: () -> Unit
 ) {
     Column {
@@ -63,25 +56,27 @@ fun UsernameLoginScreen(
             onValueChanged = onPasswordChanged,
             transformation = PasswordVisualTransformation(),
         )
-        JMorpher(setup = prep, sizedMorph = sizedMorph, modifier = Modifier.wrapContentSize(), color = Color.White) {
-            JButton(
-                onClick = onSend
-            ) {
-                Row(Modifier.padding(vertical = 8.dp, horizontal = 12.dp)) {
-                    JText(text = JTextResource.Text("Send"))
-                }
+        Spacer(modifier = Modifier.height(16.dp))
+        JButton(
+            onClick = onSend
+        ) {
+            Row(Modifier.padding(vertical = 8.dp, horizontal = 12.dp)) {
+                JText(
+                    text = JTextResource.Text("Send"),
+                    style = JDesignSystem.typography.button,
+                    color = JDesignSystem.colorTheme.body
+                )
             }
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun UsernameLoginScreenPreview() {
     UsernameLoginScreen(
         uiState = UsernameUiState("test", "none"),
         onUsernameChanged = {},
         onPasswordChanged = {},
-        sizedMorph = SizedMorph(Morph(RoundedPolygon(3), RoundedPolygon(5))),
     ) { }
 }
