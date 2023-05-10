@@ -1,43 +1,28 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'com.google.devtools.ksp'
+    id("jtemplate.android.library")
+    id("jtemplate.android.library.compose")
 }
 
 android {
-    namespace 'se.joeldenke.theme'
-    compileSdk 33
-
     defaultConfig {
-        minSdk 24
-        targetSdk 33
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+    lint {
+        checkDependencies = true
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.4.6'
-    }
+    namespace = "se.joeldenke.jtemplate.core.designsystem"
 }
 
 dependencies {
+    //lintPublish(project(":lint"))
+
+    api(libs.androidx.compose.foundation)
+    api(libs.androidx.compose.foundation.layout)
+    api(libs.androidx.compose.runtime)
+    api(libs.androidx.compose.ui.tooling.preview)
+    api(libs.androidx.compose.ui.util)
+
+    /*
     implementation "com.airbnb.android:showkase:1.0.0-beta18"
     ksp "com.airbnb.android:showkase-processor:1.0.0-beta18"
     implementation("androidx.navigation:navigation-compose:2.5.3")
@@ -58,4 +43,15 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+     */
+
+    debugApi(libs.androidx.compose.ui.tooling)
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.coil.kt.compose)
+    implementation(libs.androidx.graphics.core)
+    implementation(libs.androidx.graphics.shapes)
+
+
+    //androidTestImplementation(project(":core:testing"))
 }

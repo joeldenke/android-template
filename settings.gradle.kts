@@ -1,10 +1,12 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -13,6 +15,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "JTemplate"
-include ':app'
-include ':login'
-include ':theme'
+include(":app")
+include(":feature:login")
+include(":core:designsystem")
