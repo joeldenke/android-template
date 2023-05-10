@@ -1,21 +1,12 @@
 package se.joeldenke.login
 
-import android.graphics.Matrix
-import android.graphics.RectF
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,14 +16,13 @@ import androidx.graphics.shapes.RoundedPolygon
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import se.joeldenke.theme.ui.component.JSurface
-import se.joeldenke.theme.ui.component.JSurfaceInteraction
+import se.joeldenke.theme.ui.component.JButton
+import se.joeldenke.theme.ui.component.JMorpher
 import se.joeldenke.theme.ui.component.JText
 import se.joeldenke.theme.ui.component.JTextField
 import se.joeldenke.theme.ui.component.JTextResource
+import se.joeldenke.theme.ui.component.SizedMorph
 import se.joeldenke.theme.ui.theme.JDesignSystem
-import kotlin.math.abs
-import kotlin.math.min
 
 data class UsernameUiState(
     val username: String = "",
@@ -49,32 +39,6 @@ class UsernameLoginViewModel : ViewModel() {
     }
 
     val uiState = MutableStateFlow(UsernameUiState())
-}
-
-internal fun calculateMatrix(bounds: RectF, width: Float, height: Float): Matrix {
-    val originalWidth = bounds.right - bounds.left
-    val originalHeight = bounds.bottom - bounds.top
-    val scale = min(width / originalWidth, height / originalHeight)
-    val newLeft = bounds.left - (width / scale - originalWidth) / 2
-    val newTop = bounds.top - (height / scale - originalHeight) / 2
-    val matrix = Matrix()
-    matrix.setTranslate(-newLeft, -newTop)
-    matrix.postScale(scale, scale)
-    return matrix
-}
-
-class SizedMorph(val morph: Morph) {
-    var width = 1f
-    var height = 1f
-
-    fun resizeMaybe(newWidth: Float, newHeight: Float) {
-        if (abs(width - newWidth) > 1e-4 || abs(height - newHeight) > 1e-4) {
-            val matrix = calculateMatrix(RectF(0f, 0f, width, height), newWidth, newHeight)
-            morph.transform(matrix)
-            width = newWidth
-            height = newHeight
-        }
-    }
 }
 
 @Composable
@@ -99,23 +63,13 @@ fun UsernameLoginScreen(
             onValueChanged = onPasswordChanged,
             transformation = PasswordVisualTransformation(),
         )
-        val shape = RoundedCornerShape(50)
-        JSurface(
-            interaction = JSurfaceInteraction.Clickable(onClick = onSend),
-            modifier = Modifier.drawWithContent {
-                prep()
-                drawContent()
-                sizedMorph.resizeMaybe(size.width, size.height)
-                drawPath(
-                    sizedMorph.morph
-                        .asPath()
-                        .asComposePath(), Color.White
-                )
-            },
-            shape = shape
-        ) {
-            Row(Modifier.padding(vertical = 8.dp, horizontal = 12.dp)) {
-                JText(text = JTextResource.Text("Send"))
+        JMorpher(setup = prep, sizedMorph = sizedMorph, modifier = Modifier.wrapContentSize(), color = Color.White) {
+            JButton(
+                onClick = onSend
+            ) {
+                Row(Modifier.padding(vertical = 8.dp, horizontal = 12.dp)) {
+                    JText(text = JTextResource.Text("Send"))
+                }
             }
         }
     }

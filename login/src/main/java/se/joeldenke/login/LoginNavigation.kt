@@ -18,6 +18,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import kotlinx.coroutines.launch
+import se.joeldenke.theme.ui.component.SizedMorph
 
 sealed interface LoginNavEntry {
     val destination: String
