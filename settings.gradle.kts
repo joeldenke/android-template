@@ -17,6 +17,7 @@ dependencyResolutionManagement {
 rootProject.name = "JTemplate"
 include(":app")
 include(":feature:login")
+include(":feature:search")
 include(":core:designsystem")
 include(":core:testing")
 

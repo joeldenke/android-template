@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import se.joeldenke.login.loginGraph
+import se.joeldenke.search.searchGraph
 import se.joeldenke.theme.ui.component.JSurface
 import se.joeldenke.theme.ui.component.JSurfaceInteraction
 import se.joeldenke.theme.ui.component.JText
@@ -46,7 +47,8 @@ fun NavigationItem(
 @Composable
 fun NavigationBar(
     onOpenHome: () -> Unit,
-    onOpenUserNameLogin: () -> Unit
+    onOpenUserNameLogin: () -> Unit,
+    onOpenSearch: () -> Unit
 ) {
     Row {
         NavigationItem(
@@ -71,6 +73,17 @@ fun NavigationBar(
                 )
             }
         )
+        NavigationItem(
+            onClick = onOpenSearch,
+            modifier = Modifier.weight(1f),
+            label = {
+                JText(
+                    text = JTextResource.Text(
+                        "Search"
+                    )
+                )
+            }
+        )
     }
 }
 
@@ -78,7 +91,8 @@ fun NavigationBar(
 fun MainScreen(
     navController: NavHostController = rememberNavController(),
     onOpenHome: () -> Unit,
-    onOpenUserNameLogin: () -> Unit
+    onOpenUserNameLogin: () -> Unit,
+    onOpenSearch: () -> Unit
 ) {
     JDesignSystem {
         Column {
@@ -87,12 +101,14 @@ fun MainScreen(
                 startDestination = "main",
                 modifier = Modifier.weight(1f)
             ) {
-                main()
+                mainGraph()
                 loginGraph()
+                searchGraph()
             }
             NavigationBar(
                 onOpenHome = onOpenHome,
-                onOpenUserNameLogin = onOpenUserNameLogin
+                onOpenUserNameLogin = onOpenUserNameLogin,
+                onOpenSearch = onOpenSearch
             )
         }
     }
@@ -106,13 +122,14 @@ class MainActivity : ComponentActivity() {
             MainScreen(
                 navController = navController,
                 onOpenHome = { navController.navigate("main", bundleOf()) },
-                onOpenUserNameLogin = { navController.navigate("login") }
+                onOpenUserNameLogin = { navController.navigate("login") },
+                onOpenSearch = { navController.navigate("search") }
             )
         }
     }
 }
 
-fun NavGraphBuilder.main() {
+fun NavGraphBuilder.mainGraph() {
     navigation(startDestination = JScreen.Home.destination, route = "main") {
         composable(JScreen.Home.destination, content = JScreen.Home.content)
     }
@@ -121,5 +138,9 @@ fun NavGraphBuilder.main() {
 @Preview(widthDp = 200, heightDp = 500, showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(onOpenHome = {}, onOpenUserNameLogin = {})
+    MainScreen(
+        onOpenHome = {},
+        onOpenUserNameLogin = {},
+        onOpenSearch = {}
+    )
 }

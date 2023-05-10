@@ -37,8 +37,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:login"))
     implementation(project(":core:designsystem"))
+    implementation(project(":feature:login"))
+    implementation(project(":feature:search"))
 
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.accompanist.testharness)
