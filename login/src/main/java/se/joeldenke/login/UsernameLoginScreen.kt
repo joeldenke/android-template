@@ -25,6 +25,8 @@ import androidx.graphics.shapes.RoundedPolygon
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import se.joeldenke.theme.ui.component.JSurface
+import se.joeldenke.theme.ui.component.JSurfaceInteraction
 import se.joeldenke.theme.ui.component.JText
 import se.joeldenke.theme.ui.component.JTextField
 import se.joeldenke.theme.ui.component.JTextResource
@@ -37,7 +39,7 @@ data class UsernameUiState(
     val password: String = "",
 )
 
-class UsernameLoginViewModel: ViewModel() {
+class UsernameLoginViewModel : ViewModel() {
     fun updateUsername(value: String) {
         uiState.update { it.copy(username = value) }
     }
@@ -60,6 +62,7 @@ internal fun calculateMatrix(bounds: RectF, width: Float, height: Float): Matrix
     matrix.postScale(scale, scale)
     return matrix
 }
+
 class SizedMorph(val morph: Morph) {
     var width = 1f
     var height = 1f
@@ -97,23 +100,19 @@ fun UsernameLoginScreen(
             transformation = PasswordVisualTransformation(),
         )
         val shape = RoundedCornerShape(50)
-        Box(modifier = Modifier
-            .background(
-                JDesignSystem.colorTheme.primary,
-                shape = shape
-            )
-            .clip(shape)
-            .drawWithContent {
+        JSurface(
+            interaction = JSurfaceInteraction.Clickable(onClick = onSend),
+            modifier = Modifier.drawWithContent {
                 prep()
                 drawContent()
                 sizedMorph.resizeMaybe(size.width, size.height)
-                drawPath(sizedMorph.morph.asPath().asComposePath(), Color.White)
-            }
-            .clickable(
-                indication = null,
-                onClick = onSend,
-                interactionSource = MutableInteractionSource()
-            )
+                drawPath(
+                    sizedMorph.morph
+                        .asPath()
+                        .asComposePath(), Color.White
+                )
+            },
+            shape = shape
         ) {
             Row(Modifier.padding(vertical = 8.dp, horizontal = 12.dp)) {
                 JText(text = JTextResource.Text("Send"))
